@@ -55,9 +55,9 @@ function TodayInner() {
       </div>
 
       <div style={{ marginTop: 20, display: "flex", gap: 12 }}>
-        <Link href="/food">Food Log</Link>
-        <Link href="/workout">Workout Log</Link>
-        <Link href="/schedule">Schedule</Link>
+        <Link href="/food" style={{ border: "2px solid gray", padding: 10 }}>Food Log</Link>
+        <Link href="/workout" style={{ border: "2px solid gray", padding: 10 }}>Workout Log</Link>
+        <Link href="/schedule" style={{ border: "2px solid gray", padding: 10 }}>Schedule</Link>
       </div>
     </div>
   );

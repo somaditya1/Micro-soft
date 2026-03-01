@@ -74,7 +74,7 @@ function ScheduleInner() {
       </div>
 
       <div style={{ display: "grid", gap: 10 }}>
-        <input value={label} onChange={(e)=>setLabel(e.target.value)} style={{ padding: 10 }} placeholder="Label (Push/Pull/Legs)" />
+        <input value={label} onChange={(e)=>setLabel(e.target.value)} style={{ border: "2px solid gray", padding: 10 }} placeholder="Label (Push/Pull/Legs)" />
         <div>
           <div style={{ marginBottom: 6 }}>Days</div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -86,7 +86,7 @@ function ScheduleInner() {
                   padding: "8px 10px",
                   borderRadius: 10,
                   border: "1px solid #ddd",
-                  background: weekdays.includes(idx) ? "#ddd" : "white",
+                  background: weekdays.includes(idx) ? "black" : "darkgray",
                 }}
               >
                 {d}
@@ -97,10 +97,10 @@ function ScheduleInner() {
 
         <div>
           <div style={{ marginBottom: 6 }}>Time</div>
-          <input type="time" value={time} onChange={(e)=>setTime(e.target.value)} style={{ padding: 10 }} />
+          <input type="time" value={time} onChange={(e)=>setTime(e.target.value)} style={{ border: "2px solid gray", padding: 10 }} />
         </div>
 
-        <button onClick={save} style={{ padding: 10 }}>
+        <button onClick={save} style={{ border: "2px solid gray", padding: 10 }}>
           Save Schedule
         </button>
       </div>
