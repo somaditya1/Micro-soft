@@ -7,6 +7,8 @@ import { collection, addDoc, getDocs, query, where, orderBy } from "firebase/fir
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import BarcodeScanner from "@/components/BarcodeScanner";
+import { deleteDoc, doc } from "firebase/firestore";
+
 
 export default function FoodPage() {
   return (
@@ -71,6 +73,11 @@ function FoodInner() {
     setForm({ name: "", calories: "", protein: "", carbs: "", fat: "", servings: 1, barcode: "" });
     load();
   }
+
+  async function removeEntry(entryId) {
+        await deleteDoc(doc(db, "food_entries", entryId));
+        load(); // refresh list
+    }
 
   async function lookupBarcode(barcode) {
     // OpenFoodFacts:
@@ -150,12 +157,18 @@ function FoodInner() {
 
       <h3 style={{ marginTop: 20 }}>Today’s entries</h3>
       <ul>
-        {entries.map((e) => (
-          <li key={e.id}>
-            <b>{e.name}</b> — {e.calories} cal | P {e.protein}g | C {e.carbs}g | F {e.fat}g
-          </li>
-        ))}
-      </ul>
+                {entries.map((e) => (
+                    <li key={e.id} style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+                        <span>
+                            <b>{e.name}</b> — {e.calories} cal | P {e.protein}g | C {e.carbs}g | F {e.fat}g
+                        </span>
+
+                        <button onClick={() => removeEntry(e.id)} style={{ color: "crimson" }}>
+                            Remove
+                        </button>
+                    </li>
+                ))}
+            </ul>
     </div>
   );
 }
