@@ -42,8 +42,8 @@ export default function LoginPage() {
         <input placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} style={{ width:"100%", padding:10, marginBottom:10 }} />
         <input placeholder="Password" type="password" value={pw} onChange={(e)=>setPw(e.target.value)} style={{ width:"100%", padding:10, marginBottom:10 }} />
         {err && <p style={{ color: "crimson" }}>{err}</p>}
-        <button onClick={signIn} style={{ width:"100%", padding:10, marginBottom:10 }}>Sign In</button>
-        <button onClick={signUp} style={{ width:"100%", padding:10 }}>Sign Up</button>
+        <button onClick={signIn} style={{ border: "2px solid gray", width:"100%", padding:10, marginBottom:10 }}>Sign In</button>
+        <button onClick={signUp} style={{ border: "2px solid gray", width:"100%", padding:10 }}>Sign Up</button>
       </form>
     </div>
   );

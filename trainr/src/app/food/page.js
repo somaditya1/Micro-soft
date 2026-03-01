@@ -117,28 +117,33 @@ function FoodInner() {
         }}
       />
 
-      <h3>Manual Barcode Lookup (fallback)</h3>
+      <br></br><h3>Manual Barcode Lookup (fallback)</h3>
       <div style={{ display: "flex", gap: 8 }}>
         <input
           placeholder="Type barcode (EAN/UPC)"
           value={form.barcode}
           onChange={(e) => setForm((f) => ({ ...f, barcode: e.target.value }))}
-          style={{ flex: 1, padding: 10 }}
+          style={{ border: "2px solid gray", flex: 1, padding: 10 }}
         />
-        <button onClick={() => lookupBarcode(form.barcode)} style={{ padding: 10 }}>
+        <button onClick={() => lookupBarcode(form.barcode)} style={{ border: "2px solid gray", padding: 10 }}>
           Lookup
         </button>
       </div>
 
       <h3 style={{ marginTop: 20 }}>Add Food</h3>
       <form onSubmit={addEntry} style={{ display: "grid", gap: 10 }}>
-        <input placeholder="Name" value={form.name} onChange={(e)=>setForm(f=>({ ...f, name: e.target.value }))} style={{ padding: 10 }} />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 8 }}>
-          <input placeholder="Calories" value={form.calories} onChange={(e)=>setForm(f=>({ ...f, calories: e.target.value }))} style={{ padding: 10 }} />
-          <input placeholder="Protein" value={form.protein} onChange={(e)=>setForm(f=>({ ...f, protein: e.target.value }))} style={{ padding: 10 }} />
-          <input placeholder="Carbs" value={form.carbs} onChange={(e)=>setForm(f=>({ ...f, carbs: e.target.value }))} style={{ padding: 10 }} />
-          <input placeholder="Fat" value={form.fat} onChange={(e)=>setForm(f=>({ ...f, fat: e.target.value }))} style={{ padding: 10 }} />
-          <input placeholder="Servings" value={form.servings} onChange={(e)=>setForm(f=>({ ...f, servings: e.target.value }))} style={{ padding: 10 }} />
+        <input placeholder="Name" value={form.name} onChange={(e)=>setForm(f=>({ ...f, name: e.target.value }))} style={{ border: "2px solid gray" }} />
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 100fr)", gap: 1 }}>
+          <label for="calories">Calories:</label>
+          <input placeholder="Calories" id="calories" value={form.calories} onChange={(e)=>setForm(f=>({ ...f, calories: e.target.value }))} style={{ border: "2px solid gray" }} /><br></br>
+          <label for="protein">Protein (g):</label>
+          <input placeholder="Protein" id="protein" value={form.protein} onChange={(e)=>setForm(f=>({ ...f, protein: e.target.value }))} style={{ border: "2px solid gray"}} />
+          <label for="carbs">Carbs (g):</label>
+          <input placeholder="Carbs" id="carbs" value={form.carbs} onChange={(e)=>setForm(f=>({ ...f, carbs: e.target.value }))} style={{ border: "2px solid gray"}} /><br></br>
+          <label for="fat">Fat (g):</label>
+          <input placeholder="Fat" id="fat" value={form.fat} onChange={(e)=>setForm(f=>({ ...f, fat: e.target.value }))} style={{ border: "2px solid gray"}} />
+          <label for="servings">Servings:</label>
+          <input placeholder="Servings" id="servings" value={form.servings} onChange={(e)=>setForm(f=>({ ...f, servings: e.target.value }))} style={{ border: "2px solid gray"}} />
         </div>
         <button type="submit" style={{ padding: 10 }}>Save</button>
       </form>

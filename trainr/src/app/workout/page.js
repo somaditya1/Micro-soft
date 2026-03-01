@@ -64,14 +64,18 @@ function WorkoutInner() {
       <p>{today}</p>
 
       <h3>Create quick workout</h3>
-      <form onSubmit={addWorkout} style={{ display: "grid", gap: 10 }}>
-        <input value={title} onChange={(e)=>setTitle(e.target.value)} style={{ padding: 10 }} placeholder="Workout title" />
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 8 }}>
-          <input value={exercise} onChange={(e)=>setExercise(e.target.value)} style={{ padding: 10 }} placeholder="Exercise" />
-          <input value={reps} onChange={(e)=>setReps(e.target.value)} style={{ padding: 10 }} placeholder="Reps" />
-          <input value={weight} onChange={(e)=>setWeight(e.target.value)} style={{ padding: 10 }} placeholder="Weight" />
+      <form onSubmit={addWorkout} style={{ display: "grid", gap: 10 }}><br></br>
+        <label htmlFor="workout-title">Workout Title</label>
+        <input value={title} id="workout-title" onChange={(e)=>setTitle(e.target.value)} style={{ border: "2px solid gray", padding: 10}} placeholder="Workout title" /><br></br>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+          <label htmlFor="exercise">Exercise</label>
+          <label htmlFor="reps">Reps</label>
+          <label htmlFor="weight">Weight (lbs)</label>
+          <input value={exercise} id="exercise" onChange={(e)=>setExercise(e.target.value)} style={{ border: "2px solid gray", padding: 10 }} placeholder="Exercise" /> 
+          <input value={reps} id="reps" onChange={(e)=>setReps(e.target.value)} style={{ border: "2px solid gray", padding: 10 }} placeholder="Reps" />
+          <input value={weight} id="weight" onChange={(e)=>setWeight(e.target.value)} style={{ border: "2px solid gray", padding: 10 }} placeholder="Weight" />
         </div>
-        <button type="submit" style={{ padding: 10 }}>Save Workout</button>
+        <button type="submit" style={{ border: "2px solid gray", padding: 10 }}>Save Workout</button>
       </form>
 
       <h3 style={{ marginTop: 20 }}>Today’s workouts</h3>
