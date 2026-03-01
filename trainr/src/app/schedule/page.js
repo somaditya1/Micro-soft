@@ -5,6 +5,8 @@ import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+
 
 export default function SchedulePage() {
   return (
@@ -18,6 +20,7 @@ const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 function ScheduleInner() {
   const { user } = useAuth();
+  const router = useRouter();
   const [weekdays, setWeekdays] = useState([1,3,5]);
   const [time, setTime] = useState("18:00");
   const [label, setLabel] = useState("Workout");
@@ -67,6 +70,19 @@ function ScheduleInner() {
 
   return (
     <div style={{ maxWidth: 720, margin: "30px auto", padding: 12 }}>
+        <button
+                onClick={() => router.push("/today")}
+                style={{
+                    marginBottom: 20,
+                    padding: "8px 14px",
+                    borderRadius: 8,
+                    border: "1px solid #ccc",
+                    background: "#000000",
+                    cursor: "pointer",
+                }}
+            >
+                ← Back to Today
+            </button>
       <h1>Schedule</h1>
 
       <div style={{ border: "1px solid #ddd", padding: 12, borderRadius: 10, marginBottom: 12 }}>

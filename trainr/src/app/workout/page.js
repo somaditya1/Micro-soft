@@ -6,6 +6,7 @@ import { db } from "@/lib/firebase";
 import { addDoc, collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function WorkoutPage() {
   return (
@@ -17,6 +18,7 @@ export default function WorkoutPage() {
 
 function WorkoutInner() {
   const { user } = useAuth();
+  const router = useRouter();
   const today = format(new Date(), "yyyy-MM-dd");
 
   const [workouts, setWorkouts] = useState([]);
@@ -60,6 +62,19 @@ function WorkoutInner() {
 
   return (
     <div style={{ maxWidth: 820, margin: "30px auto", padding: 12 }}>
+        <button
+                onClick={() => router.push("/today")}
+                style={{
+                    marginBottom: 20,
+                    padding: "8px 14px",
+                    borderRadius: 8,
+                    border: "1px solid #ccc",
+                    background: "#000000",
+                    cursor: "pointer",
+                }}
+            >
+                ← Back to Today
+            </button>
       <h1>Workout Log</h1>
       <p>{today}</p>
 
