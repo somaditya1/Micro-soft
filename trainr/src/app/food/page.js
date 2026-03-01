@@ -77,6 +77,9 @@ function FoodInner() {
     }
 
     async function removeEntry(entryId) {
+        const ok = confirm("Delete this Entry?");
+        if (!ok) return;
+
         await deleteDoc(doc(db, "food_entries", entryId));
         load(); // refresh list
     }

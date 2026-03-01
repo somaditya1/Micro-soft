@@ -7,6 +7,7 @@ import { addDoc, collection, getDocs, query, where, orderBy } from "firebase/fir
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { deleteDoc, doc } from "firebase/firestore";
 
 export default function WorkoutPage() {
   return (
@@ -37,6 +38,14 @@ function WorkoutInner() {
     const snap = await getDocs(q);
     setWorkouts(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
   }
+
+  async function removeWorkout(workoutId) {
+  const ok = confirm("Delete this workout?");
+  if (!ok) return;
+
+  await deleteDoc(doc(db, "workouts", workoutId));
+  load();
+}
 
   useEffect(() => {
     load();
@@ -95,19 +104,34 @@ function WorkoutInner() {
 
       <h3 style={{ marginTop: 20 }}>Today’s workouts</h3>
       {workouts.map((w) => (
-        <div key={w.id} style={{ border: "1px solid #ddd", padding: 12, borderRadius: 10, marginBottom: 10 }}>
-          <b>{w.title}</b>
-          <ul>
-            {(w.exercises || []).map((ex, idx) => (
-              <li key={idx}>
-                {ex.name}: {(ex.sets || []).map((s, sidx) => (
-                  <span key={sidx}> {s.weight}x{s.reps}</span>
-                ))}
-              </li>
-            ))}
-          </ul>
-        </div>
+  <div
+    key={w.id}
+    style={{
+      border: "1px solid #ddd",
+      padding: 12,
+      borderRadius: 10,
+      marginBottom: 10,
+    }}
+  >
+    <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+      <b>{w.title}</b>
+
+      <button onClick={() => removeWorkout(w.id)} style={{ color: "crimson" }}>
+        Delete
+      </button>
+    </div>
+
+    <ul>
+      {(w.exercises || []).map((ex, idx) => (
+        <li key={idx}>
+          {ex.name}: {(ex.sets || []).map((s, sidx) => (
+            <span key={sidx}> {s.weight}x{s.reps}</span>
+          ))}
+        </li>
       ))}
+    </ul>
+  </div>
+))}
     </div>
   );
 }
