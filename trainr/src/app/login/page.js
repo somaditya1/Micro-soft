@@ -1,16 +1,19 @@
 "use client";
 
+// import statements for components we will use
 import { useState } from "react";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 
+
 export default function LoginPage() {
-  const router = useRouter();
+  const router = useRouter(); // used to redirect successful log-in
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
 
+  // signs in exisiting user
   async function signIn(e) {
     e.preventDefault();
     setErr("");
@@ -22,6 +25,7 @@ export default function LoginPage() {
     }
   }
 
+  // creates new user entry in Firebase
   async function signUp(e) {
     e.preventDefault();
     setErr("");
@@ -32,7 +36,7 @@ export default function LoginPage() {
       setErr(e.message);
     }
   }
-
+   // Page button's and text boxes
   return (
     <div style={{ maxWidth: 420, margin: "40px auto" }}>
       <h1>Trainr</h1>

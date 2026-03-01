@@ -1,5 +1,6 @@
 "use client";
 
+// import statements for components we will use
 import RequireAuth from "@/components/RequireAuth";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
@@ -10,6 +11,7 @@ import BarcodeScanner from "@/components/BarcodeScanner";
 import { deleteDoc, doc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
+// makes sure only signed in users can see this page
 export default function FoodPage() {
     return (
         <RequireAuth>
@@ -18,9 +20,12 @@ export default function FoodPage() {
     );
 }
 
+
 function FoodInner() {
-    const { user } = useAuth();
-    const router = useRouter();
+    const { user } = useAuth(); // verifies current user
+    const router = useRouter(); // used for back navigation
+
+    // vars to store relevent information
 
     const today = format(new Date(), "yyyy-MM-dd");
 
@@ -35,6 +40,7 @@ function FoodInner() {
         barcode: "",
     });
 
+    // we load our data which gets stored on Firebase
     async function load() {
         const q = query(
             collection(db, "food_entries"),
@@ -48,9 +54,9 @@ function FoodInner() {
 
     useEffect(() => {
         load();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user.uid]);
 
+    // adds new entry into Firebase
     async function addEntry(e) {
         e.preventDefault();
         const calories = Number(form.calories) || 0;
@@ -72,10 +78,12 @@ function FoodInner() {
             createdAt: new Date(),
         });
 
+        // reset the form after saving new entry
         setForm({ name: "", calories: "", protein: "", carbs: "", fat: "", servings: 1, barcode: "" });
         load();
     }
 
+    // removes entry from list
     async function removeEntry(entryId) {
         const ok = confirm("Delete this Entry?");
         if (!ok) return;
@@ -84,23 +92,24 @@ function FoodInner() {
         load(); // refresh list
     }
 
+    // look up barcode information once inputted
     async function lookupBarcode(barcode) {
-        // OpenFoodFacts:
+        // use OpenFoodFacts to pull nutrition facts:
         const url = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
         const res = await fetch(url);
         const data = await res.json();
 
+        // handles barcode error
         if (!data || data.status !== 1) {
             alert("Barcode not found. Try manual entry.");
             return;
         }
         const p = data.product;
 
-        // values may exist per 100g; keep it simple:
         const nutr = p.nutriments || {};
         const name = p.product_name || "Unknown product";
 
-        // Try common keys:
+        // exact nutrition values
         const calories = nutr["energy-kcal_100g"] ?? nutr["energy-kcal_serving"] ?? 0;
         const protein = nutr["proteins_100g"] ?? nutr["proteins_serving"] ?? 0;
         const carbs = nutr["carbohydrates_100g"] ?? nutr["carbohydrates_serving"] ?? 0;
@@ -118,8 +127,8 @@ function FoodInner() {
     }
 
     return (
-        <div style={{ maxWidth: 820, margin: "30px auto", padding: 12 }}>
-            <button
+        <div style={{ maxWidth: 820, margin: "30px auto", padding: 12 }}> 
+            <button //back button
                 onClick={() => router.push("/today")}
                 style={{
                     marginBottom: 20,
@@ -142,7 +151,7 @@ function FoodInner() {
                 }}
             />
 
-            <br></br><h3>Manual Barcode Lookup (fallback)</h3>
+            <br></br><h3>Manual Barcode Lookup</h3> 
             <div style={{ display: "flex", gap: 8 }}>
                 <input
                     placeholder="Type barcode (EAN/UPC)"

@@ -1,5 +1,6 @@
 "use client";
 
+// import statements for components we will use
 import RequireAuth from "@/components/RequireAuth";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
@@ -9,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteDoc, doc } from "firebase/firestore";
 
+// authenticates user
 export default function WorkoutPage() {
   return (
     <RequireAuth>
@@ -18,10 +20,11 @@ export default function WorkoutPage() {
 }
 
 function WorkoutInner() {
-  const { user } = useAuth();
+  const { user } = useAuth(); // current logged-in user
   const router = useRouter();
   const today = format(new Date(), "yyyy-MM-dd");
 
+  // vars to use on our page
   const [workouts, setWorkouts] = useState([]);
   const [title, setTitle] = useState("Workout");
   const [exercise, setExercise] = useState("Bench Press");
@@ -39,6 +42,7 @@ function WorkoutInner() {
     setWorkouts(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
   }
 
+  // remove a workout from user list
   async function removeWorkout(workoutId) {
   const ok = confirm("Delete this workout?");
   if (!ok) return;
@@ -49,9 +53,9 @@ function WorkoutInner() {
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.uid]);
 
+  // add a workout to user's list
   async function addWorkout(e) {
     e.preventDefault();
     await addDoc(collection(db, "workouts"), {
@@ -69,6 +73,7 @@ function WorkoutInner() {
     load();
   }
 
+  // page style and appearance
   return (
     <div style={{ maxWidth: 820, margin: "30px auto", padding: 12 }}>
         <button

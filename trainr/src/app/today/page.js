@@ -1,5 +1,6 @@
 "use client";
 
+// import statements for components we will use
 import RequireAuth from "@/components/RequireAuth";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
@@ -9,6 +10,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
+// imports for our graphs
 import {
     LineChart,
     Line,
@@ -19,6 +21,7 @@ import {
     CartesianGrid,
 } from "recharts";
 
+// authenticates user
 export default function TodayPage() {
     return (
         <RequireAuth>
@@ -28,9 +31,9 @@ export default function TodayPage() {
 }
 
 function TodayInner() {
-    const { user } = useAuth();
+    const { user } = useAuth(); // current logged-in user
     const todayStr = format(new Date(), "yyyy-MM-dd");
-    const startStr = format(subDays(new Date(), 6), "yyyy-MM-dd"); // last 7 days incl today
+    const startStr = format(subDays(new Date(), 6), "yyyy-MM-dd"); // last 7 days includes today
 
     const [todayTotals, setTodayTotals] = useState({ calories: 0, protein: 0, carbs: 0, fat: 0 });
     const [weekData, setWeekData] = useState([]); // [{date, calories, protein, carbs, fat}]
@@ -40,7 +43,7 @@ function TodayInner() {
 
     useEffect(() => {
         async function load() {
-            // Query last 7 days by date string range (works because yyyy-MM-dd sorts lexicographically)
+            // query last 7 days by date string range
             const q = query(
                 collection(db, "food_entries"),
                 where("userId", "==", user.uid),
@@ -51,7 +54,7 @@ function TodayInner() {
             const snap = await getDocs(q);
             const rows = snap.docs.map((d) => d.data());
 
-            // Build a map date -> totals
+            // we compile data into a map by date
             const map = new Map();
             for (const r of rows) {
                 const d = r.date;
@@ -65,7 +68,7 @@ function TodayInner() {
                 agg.fat += Number(r.fat) || 0;
             }
 
-            // Ensure ALL 7 days exist (even if 0 entries)
+            // ensure all 7 days exist
             const arr = [];
             for (let i = 6; i >= 0; i--) {
                 const d = format(subDays(new Date(), i), "yyyy-MM-dd");
@@ -74,7 +77,7 @@ function TodayInner() {
 
             setWeekData(arr);
 
-            // Today totals come from today's bucket
+            // today totals from today's 'bucket'
             const todayBucket = arr[arr.length - 1];
             setTodayTotals({
                 calories: todayBucket.calories,
@@ -84,6 +87,7 @@ function TodayInner() {
             });
         }
 
+        // load the calorie goal from Firebase
         async function loadGoal() {
             const ref = doc(db, "profiles", user.uid);
             const snap = await getDoc(ref);
@@ -103,7 +107,7 @@ function TodayInner() {
     }, [user?.uid, startStr, todayStr]);
 
     const chartData = useMemo(() => {
-        // nicer labels like "Mon", "Tue" or "02/28"
+        // nicer labels
         return weekData.map((d) => ({
             ...d,
             label: d.date.slice(5), // "MM-dd"
@@ -116,6 +120,8 @@ function TodayInner() {
 
         await setDoc(doc(db, "profiles", user.uid), { calorieGoal: g }, { merge: true });
     }
+
+    // page style and appearance
 
     return (
         <div style={{ maxWidth: 900, margin: "30px auto", padding: 12 }}>

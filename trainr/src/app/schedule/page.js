@@ -1,5 +1,6 @@
 "use client";
 
+// import statements for components we will use
 import RequireAuth from "@/components/RequireAuth";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
@@ -8,6 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 
+// authenticate user
 export default function SchedulePage() {
   return (
     <RequireAuth>
@@ -16,10 +18,11 @@ export default function SchedulePage() {
   );
 }
 
+// days list to reference later
 const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 function ScheduleInner() {
-  const { user } = useAuth();
+  const { user } = useAuth(); // current signed-in user
   const router = useRouter();
   const [weekdays, setWeekdays] = useState([1,3,5]);
   const [time, setTime] = useState("18:00");
@@ -40,6 +43,7 @@ function ScheduleInner() {
     load();
   }, [ref]);
 
+  // runs when user hits "save" button
   async function save() {
     await setDoc(ref, { userId: user.uid, weekdays, time, label }, { merge: true });
     alert("Saved!");
@@ -62,12 +66,15 @@ function ScheduleInner() {
     return "No upcoming workout found.";
   }, [time, weekdays]);
 
+
+  // for setting days on schedule
   function toggleDay(dayIdx) {
     setWeekdays((prev) =>
       prev.includes(dayIdx) ? prev.filter((d) => d !== dayIdx) : [...prev, dayIdx].sort()
     );
   }
 
+  // page style and appearance
   return (
     <div style={{ maxWidth: 720, margin: "30px auto", padding: 12 }}>
         <button
